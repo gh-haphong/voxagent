@@ -35,12 +35,13 @@ function parseArgs(argv) {
 
   const modelIdx = args.indexOf('--model');
   const model = modelIdx !== -1 && args[modelIdx + 1] ? args[modelIdx + 1] : DEFAULT_MODEL;
+  const debug = args.includes('--debug');
 
-  return { model };
+  return { model, debug };
 }
 
 async function main() {
-  const { model } = parseArgs(process.argv);
+  const { model, debug } = parseArgs(process.argv);
 
   printBanner(VERSION);
 
@@ -76,6 +77,9 @@ async function main() {
     await waitForKey();
     const pcmBuffer = stopCapture(handle);
 
+    const durationSec = (pcmBuffer.length / 2 / 16000).toFixed(1);
+    printStatus(`Captured ${durationSec}s of audio (${pcmBuffer.length} bytes)`);
+
     // Check minimum recording length (~1 second at 16kHz 16-bit mono)
     if (pcmBuffer.length < 32000) {
       print('Recording too short. Try again.\n');
@@ -84,7 +88,7 @@ async function main() {
 
     try {
       printStatus('Transcribing...');
-      const text = await transcribe(pcmBuffer, modelPath);
+      const text = await transcribe(pcmBuffer, modelPath, debug);
 
       if (!text || !text.trim()) {
         print('No speech detected.\n');

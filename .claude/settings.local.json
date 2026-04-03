@@ -7,7 +7,11 @@
       "Bash(node -e ':*)",
       "Bash(node -e \"const { checkConnection } = require\\('./lib/llm'\\); checkConnection\\(\\).then\\(r => console.log\\('Ollama connected:', r\\)\\)\")",
       "Bash(node bin/voxagent.js)",
-      "Bash(echo \"Exit code: $?\")"
+      "Bash(echo \"Exit code: $?\")",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)"
     ]
   }
 }
