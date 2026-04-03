@@ -1,0 +1,44 @@
+{
+  "name": "voxagent",
+  "version": "0.1.0",
+  "description": "Voice-powered terminal agent. Fully offline. Speak commands, get answers.",
+  "main": "lib/index.js",
+  "bin": {
+    "voxagent": "./bin/voxagent.js"
+  },
+  "scripts": {
+    "start": "node bin/voxagent.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "voice",
+    "cli",
+    "llm",
+    "speech-to-text",
+    "microphone",
+    "ollama",
+    "terminal",
+    "voice-agent",
+    "decibri",
+    "agent",
+    "whisper",
+    "offline",
+    "local",
+    "privacy"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/analyticsinmotion/voxagent.git"
+  },
+  "homepage": "https://voxagent.run",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "decibri": "^1.0.0",
+    "@kutalia/whisper-node-addon": "^1.0.0",
+    "ollama": "^0.5.0"
+  }
+}

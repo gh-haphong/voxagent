@@ -1,0 +1,110 @@
+#!/usr/bin/env node
+'use strict';
+
+const { waitForKey, print, printError, printTranscript, printResponse, printStatus, printBanner } = require('../lib/ui');
+const { startCapture, stopCapture } = require('../lib/capture');
+const { ensureModel } = require('../lib/model');
+const { transcribe } = require('../lib/stt');
+const { checkConnection, ask, DEFAULT_MODEL } = require('../lib/llm');
+
+const VERSION = '0.1.0';
+
+const USAGE = `
+Usage: voxagent [options]
+
+Voice-powered terminal agent. Fully offline.
+
+Options:
+  --model <name>   Ollama model to use (default: ${DEFAULT_MODEL})
+  --help, -h       Show this help message
+  --version, -v    Show version number
+`;
+
+function parseArgs(argv) {
+  const args = argv.slice(2);
+
+  if (args.includes('--help') || args.includes('-h')) {
+    console.log(USAGE.trim());
+    process.exit(0);
+  }
+
+  if (args.includes('--version') || args.includes('-v')) {
+    console.log(VERSION);
+    process.exit(0);
+  }
+
+  const modelIdx = args.indexOf('--model');
+  const model = modelIdx !== -1 && args[modelIdx + 1] ? args[modelIdx + 1] : DEFAULT_MODEL;
+
+  return { model };
+}
+
+async function main() {
+  const { model } = parseArgs(process.argv);
+
+  printBanner(VERSION);
+
+  // Preflight: check Ollama
+  printStatus('Checking Ollama connection...');
+  if (!(await checkConnection())) {
+    printError('Ollama is not running. Start it with: ollama serve');
+    printError('Install Ollama from https://ollama.com');
+    process.exit(1);
+  }
+  printStatus(`Ollama connected. Model: ${model}`);
+
+  // Preflight: ensure whisper model
+  printStatus('Checking whisper model...');
+  let modelPath;
+  try {
+    modelPath = await ensureModel();
+  } catch (err) {
+    printError(`Failed to set up whisper model: ${err.message}`);
+    process.exit(1);
+  }
+  printStatus('Whisper model ready.');
+
+  print('');
+
+  // Main loop
+  while (true) {
+    print('Press ENTER to speak...');
+    await waitForKey();
+
+    print('[Recording...] Press ENTER to stop.');
+    const handle = startCapture();
+    await waitForKey();
+    const pcmBuffer = stopCapture(handle);
+
+    // Check minimum recording length (~1 second at 16kHz 16-bit mono)
+    if (pcmBuffer.length < 32000) {
+      print('Recording too short. Try again.\n');
+      continue;
+    }
+
+    try {
+      printStatus('Transcribing...');
+      const text = await transcribe(pcmBuffer, modelPath);
+
+      if (!text || !text.trim()) {
+        print('No speech detected.\n');
+        continue;
+      }
+
+      printTranscript(text);
+
+      printStatus('\nThinking...');
+      const response = await ask(text, model);
+      printResponse(response);
+      print('');
+    } catch (err) {
+      printError(err.message);
+      print('');
+    }
+  }
+}
+
+main().catch((err) => {
+  printError(err.message);
+  process.exit(1);
+});
